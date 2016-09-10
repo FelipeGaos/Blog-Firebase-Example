@@ -1,0 +1,11 @@
+.form-signup input[type="email"], .form-signup input[type="password"] {
+    margin-bottom: 10px;
+}
+
+button.btn-primary {
+    margin-top: 40px;
+}
+
+.form-signin-heading {
+    margin-bottom: 30px;
+}
