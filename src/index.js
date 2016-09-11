@@ -5,6 +5,7 @@ import App from './views/App';
 import Home from './views/Home/Home';
 import Register from './views/Register/Register';
 import Login from './views/Login/Login';
+import CreatePost from './views/NewPost/CreatePost';
 import './index.css';
 
 ReactDOM.render(
@@ -13,6 +14,7 @@ ReactDOM.render(
             <IndexRoute component={Home}/>
             <Route path="register" component={Register} />
             <Route path="login" component={Login} />
+            <Route path="new_post" component={CreatePost} />
         </Route>
     </Router>,
   document.getElementById('root')

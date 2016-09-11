@@ -15,6 +15,9 @@ class App extends Component {
                               <Link to="/">Home</Link>
                           </li>
                           <li>
+                              <Link to="/new_post">Create Post</Link>
+                          </li>
+                          <li>
                               <Link to="/login">Sign In</Link>
                           </li>
                           <li>

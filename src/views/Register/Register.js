@@ -59,7 +59,7 @@ class Register extends Component {
             <form className="form-signup" onSubmit={this.handleSubmit}>
                 <h2 className="form-signin-heading">Please sign up</h2>
                 <label className="sr-only">Email</label>
-                <input type="email" className="form-control" placeholder="Email" value={this.state.email} onChange={this.handleEmailChange} />
+                <input type="email" className="form-control" placeholder="Email" onChange={this.handleEmailChange} />
                 <label className="sr-only">Password</label>
                 <input type="password" className="form-control" placeholder="Password" onChange={this.handlePasswordChange} />
                 <label className="sr-only">Repeat Password</label>
