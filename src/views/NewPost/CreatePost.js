@@ -18,26 +18,40 @@ class CreatePost extends Component {
         this.handlePostBodyChange = this.handlePostBodyChange.bind(this);
         this.writeNewPost = this.writeNewPost.bind(this);
     }
+
+    hasEmptyFields() {
+        return !this.state.title || !this.state.body;
+    }
+
     handleTitleChange(e) {
         this.setState({title: e.target.value});
     }
+
     handlePostBodyChange(e) {
         this.setState({body: e.target.value});
     }
+
     handleSubmit(e) {
         e.preventDefault();
         if (this.hasEmptyFields()) {
             console.log("Empty fields");
             return;
         }
-        this.writeNewPost(this.state.title, this.state.body);
+        var user = firebase.auth().currentUser;
+        this.writeNewPost(user.uid, user.email, this.state.title, this.state.body).then(function() {
+            console.log("success");
+            //todo: clear form fields
+        }, function(error) {
+            console.log(error);
+        });
     }
-    writeNewPost(uid, username, title, body) {
+
+    writeNewPost(uid, username, title, content) {
         // A post entry.
         var postData = {
-            username: username,
             title: title,
-            body: body,
+            content: content,
+            username: username,
             datetime: (new Date()).toJSON()
         };
 
@@ -51,9 +65,7 @@ class CreatePost extends Component {
 
         return firebase.database().ref().update(updates);
     }
-    hasEmptyFields() {
-        return !this.state.title || !this.state.body;
-    }
+
     render() {
         return (
             <form className="form-newpost" onSubmit={this.handleSubmit}>

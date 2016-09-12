@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import bottomLogo from '../images/leaper-footer.png'
+import logo from '../images/color-logo.png'
 import { Link } from 'react-router'
 import './App.css';
 
 class App extends Component {
-    userLoggedIn = false;
 
     constructor (props) {
         super(props);
@@ -43,6 +43,7 @@ class App extends Component {
             <div className="App">
                 <div className="App-header">
                     <div className="header-bar">
+                        <img className="App-logo" src={logo} />
                         <ul className="nav navbar-nav navbar-right">
                             <li>
                                 <Link to="/">Home</Link>

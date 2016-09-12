@@ -22,6 +22,8 @@ class Register extends Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
         this.callBackAuthState = this.callBackAuthState.bind(this);
+        this.signUpSuccessCb = this.signUpSuccessCb.bind(this);
+        this.signUpErrorCb = this.signUpErrorCb.bind(this);
     }
 
     callBackAuthState(user) {
@@ -46,6 +48,26 @@ class Register extends Component {
         this.setState({repeatPass: e.target.value});
     }
 
+    signUpSuccessCb(response) {
+        hashHistory.push('/');
+    }
+
+    signUpErrorCb(error) {
+        switch (error.code) {
+            case "auth/user-not-found": {
+                console.log("There is no account associated with that email address.");
+                break;
+            }
+            case "auth/wrong-password": {
+                console.log("Invalid password, please try again!");
+                break;
+            }
+            default:
+                break;
+        }
+        console.log(error);
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         if (!this.isValidEmail()) {
@@ -56,12 +78,7 @@ class Register extends Component {
             console.log("Passwords don't match!");
             return;
         }
-        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
-            // Handle Errors here.
-            // var errorCode = error.code;
-            // var errorMessage = error.message;
-            console.log(error);
-        });
+        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(this.signUpSuccessCb, this.signUpErrorCb);
     }
     passwordsMatch() {
         return this.state.password === this.state.repeatPass;

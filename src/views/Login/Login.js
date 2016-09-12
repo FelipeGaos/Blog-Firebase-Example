@@ -42,7 +42,7 @@ class Login extends Component {
     }
 
     signInSuccessCb(response) {
-        console.log(response);
+        hashHistory.push('/');
     }
 
     signInErrorCb(error) {

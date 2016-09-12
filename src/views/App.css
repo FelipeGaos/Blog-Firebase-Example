@@ -1,13 +1,9 @@
-html, body {
-  margin:0;
-  padding:0;
-  height: 100%;
-}
+@import 'https://fonts.googleapis.com/css?family=Roboto';
 
-a {
+.navbar-right a {
   color: #fff!important;
 }
-a:hover {
+.navbar-right a:hover {
   color: #d5d5d5 !important;
 }
 
@@ -36,7 +32,7 @@ a:hover {
 }
 
 .body-container {
-  padding-bottom: 135px;   /* Height of the footer */
+  padding: 0 13% 135px 13%;
 }
 
 .footer {
@@ -50,13 +46,15 @@ a:hover {
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  height: 50px;
+  float: left;
+  margin-top: 10px;
 }
 
 .header-bar {
   width: 100%;
   height: 60px;
+  padding: 0 13%;
 }
 
 .navbar-right {
@@ -65,7 +63,7 @@ a:hover {
 
 .nav li a {
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 1px;
   padding: 20px;
 }
@@ -98,13 +96,4 @@ hr.small {
   display: block;
   font-weight: 300;
   margin: 10px 0 0;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }

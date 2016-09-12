@@ -1,0 +1,19 @@
+.posts-section {
+    text-align: left;
+    padding: 10px 20px;
+}
+
+.posts-section h2 {
+    margin-bottom: 20px;
+    margin-top: 35px;
+}
+
+.post-author {
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+a.read-more {
+    float: right;
+    margin-right: 25px;
+}
