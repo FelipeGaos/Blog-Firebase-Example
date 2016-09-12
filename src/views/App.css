@@ -1,4 +1,6 @@
 html, body {
+  margin:0;
+  padding:0;
   height: 100%;
 }
 
@@ -15,13 +17,14 @@ a:hover {
   margin: 0 auto;
 }
 
-.App {
-  text-align: center;
+#root {
+  height: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.App, #root {
+  text-align: center;
+  min-height: 100%;
+  position: relative;
 }
 
 .App-header {
@@ -30,6 +33,25 @@ a:hover {
   background-position-y: 50%;
   height: 420px;
   color: white;
+}
+
+.body-container {
+  padding-bottom: 135px;   /* Height of the footer */
+}
+
+.footer {
+  background-color: #E1E1E1;
+  padding: 30px;
+  height: 135px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
 }
 
 .header-bar {
@@ -69,6 +91,7 @@ hr.small {
   border-width: 4px;
   border-color: #fff;
 }
+
 .subheading {
   font-size: 24px;
   line-height: 1.1;
@@ -79,16 +102,6 @@ hr.small {
 
 .App-intro {
   font-size: large;
-}
-
-.footer {
-  background-color: #E1E1E1;
-  padding: 30px;
-  height: 135px;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
 }
 
 @keyframes App-logo-spin {

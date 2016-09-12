@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from 'react';
+import { hashHistory } from 'react-router'
 import './login.css';
 
 class Login extends Component {
@@ -19,16 +20,31 @@ class Login extends Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.signInSuccessCb = this.signInSuccessCb.bind(this);
         this.signInErrorCb = this.signInErrorCb.bind(this);
+        this.callBackAuthState = this.callBackAuthState.bind(this);
     }
+
+    callBackAuthState(user) {
+        if (user) {
+            hashHistory.push('/');
+        }
+    }
+
+    componentDidMount = function() {
+        firebase.auth().onAuthStateChanged(this.callBackAuthState);
+    };
+
     handleEmailChange(e) {
         this.setState({email: e.target.value});
     }
+
     handlePasswordChange(e) {
         this.setState({password: e.target.value});
     }
+
     signInSuccessCb(response) {
         console.log(response);
     }
+
     signInErrorCb(error) {
         switch (error.code) {
             case "auth/user-not-found": {

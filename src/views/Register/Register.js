@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from 'react';
+import { hashHistory } from 'react-router'
 import './register.css';
 
 class Register extends Component {
@@ -20,16 +21,31 @@ class Register extends Component {
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
+        this.callBackAuthState = this.callBackAuthState.bind(this);
     }
+
+    callBackAuthState(user) {
+        if (user) {
+            hashHistory.push('/');
+        }
+    }
+
+    componentDidMount = function() {
+        firebase.auth().onAuthStateChanged(this.callBackAuthState);
+    };
+
     handleEmailChange(e) {
         this.setState({email: e.target.value});
     }
+
     handlePasswordChange(e) {
         this.setState({password: e.target.value});
     }
+
     handleRepeatPasswordChange(e) {
         this.setState({repeatPass: e.target.value});
     }
+
     handleSubmit(e) {
         e.preventDefault();
         if (!this.isValidEmail()) {
