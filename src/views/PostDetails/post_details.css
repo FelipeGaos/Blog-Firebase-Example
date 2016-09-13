@@ -8,7 +8,7 @@
     margin-top: 15px;
 }
 
-.post-author {
+.post-details-author {
     margin-bottom: 50px;
     margin-top: 20px;
     text-align: right;
@@ -24,6 +24,7 @@
 
 .comments-section {
     padding: 0 15%;
+    margin-bottom: 45px;
 }
 
 .num-comments-title {
@@ -37,8 +38,8 @@
 }
 
 .add-comment-btn {
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 25px!important;
+    font-size: 13px;
 }
 
 .comment-author {
@@ -55,4 +56,24 @@
 
 .comment-body:first-letter {
     text-transform: capitalize
+}
+
+.actions-comment-box {
+    font-size: 11px;
+}
+
+.actions-comment-box a + a {
+    margin-left: 10px;
+}
+
+.edit-comment-btn {
+    border: none;
+    background: none;
+    margin: 10px 0;
+}
+
+.edit-comment-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0;
 }
