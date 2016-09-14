@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { hashHistory } from 'react-router'
+import { Helpers } from '../../Helpers/helpers'
 import './home.css';
 
 class Home extends Component {
@@ -18,8 +19,6 @@ class Home extends Component {
         this.callBackAuthState = this.callBackAuthState.bind(this);
         this.buildListOfPosts = this.buildListOfPosts.bind(this);
         this.onValueChangeListener = this.onValueChangeListener.bind(this);
-        this.parsePostDate = this.parsePostDate.bind(this);
-        this.createPostSummary = this.createPostSummary.bind(this);
         this.openFullPost = this.openFullPost.bind(this);
     }
 
@@ -33,7 +32,8 @@ class Home extends Component {
         }
     }
 
-    openFullPost(postId) {
+    openFullPost(e) {
+        var postId = e.target.getAttribute("value");
         hashHistory.push('/posts/' + postId);
     }
 
@@ -41,7 +41,7 @@ class Home extends Component {
         this.buildListOfPosts(data.val());
     }
 
-    componentDidMount = function() {
+    componentDidMount = () => {
         firebase.auth().onAuthStateChanged(this.callBackAuthState);
 
         var recentPostsRef = firebase.database().ref('/posts/').limitToLast(100);
@@ -62,26 +62,6 @@ class Home extends Component {
         // });
     };
 
-    parsePostDate(date) {
-        var dateObj = new Date(date);
-        var convertedDate = dateObj.toDateString().split(" ");
-        return convertedDate[1] + " " + convertedDate[2] + ", " + convertedDate[3];
-    }
-
-    /**
-     * Extracts a summary (up to 350 characters) of the post full content
-     * @param post
-     * @returns {*}
-     */
-    createPostSummary(post) {
-        if (post.length < 350) {
-            return post;
-        }
-        var summary = post.substring(0, 350);
-        var index = Math.max(summary.lastIndexOf('?'), summary.lastIndexOf('!'), summary.lastIndexOf('.'));
-        return summary.substring(0, index + 1);
-    }
-
     buildListOfPosts(posts) {
         var tempPosts = [];
         for (var k in posts) {
@@ -89,10 +69,10 @@ class Home extends Component {
                 tempPosts.push(
                     <div key={k}>
                         <h2>{posts[k].title}</h2>
-                        <p>{this.createPostSummary(posts[k].content)}</p>
+                        <p>{Helpers.createPostSummary(posts[k].content)}</p>
                         <p className="post-author">
-                            <b>{posts[k].username}</b> wrote this on {this.parsePostDate(posts[k].datetime)}
-                            <a className="read-more" onClick={() => this.openFullPost(k)}>Read more</a>
+                            <b>{posts[k].username}</b> wrote this on {Helpers.convertDateToString(posts[k].datetime)}
+                            <a className="read-more" value={k} onClick={this.openFullPost}>Read more</a>
                         </p>
                     </div>
                 );

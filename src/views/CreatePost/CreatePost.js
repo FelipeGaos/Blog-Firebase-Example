@@ -3,24 +3,22 @@
  */
 
 import React, { Component } from 'react';
+import { Helpers } from '../../Helpers/helpers'
 import './create_post.css';
 
 class CreatePost extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.state = {
-            title: '',
-            body: ''
+            title: "",
+            content: ""
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handlePostBodyChange = this.handlePostBodyChange.bind(this);
         this.writeNewPost = this.writeNewPost.bind(this);
-    }
-
-    hasEmptyFields() {
-        return !this.state.title || !this.state.body;
+        this.writeNewPostSuccessCb = this.writeNewPostSuccessCb.bind(this);
     }
 
     handleTitleChange(e) {
@@ -28,22 +26,26 @@ class CreatePost extends Component {
     }
 
     handlePostBodyChange(e) {
-        this.setState({body: e.target.value});
+        this.setState({content: e.target.value});
+    }
+
+    writeNewPostSuccessCb() {
+        console.log("success");
+        this.setState({title: ""});
+        this.setState({content: ""});
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        if (this.hasEmptyFields()) {
+        if (Helpers.hasEmptyFields(this.state.title, this.state.content)) {
             console.log("Empty fields");
             return;
         }
         var user = firebase.auth().currentUser;
-        this.writeNewPost(user.uid, user.email, this.state.title, this.state.body).then(function() {
-            console.log("success");
-            //todo: clear form fields
-        }, function(error) {
-            console.log(error);
-        });
+        this.writeNewPost(user.uid, user.email, this.state.title, this.state.content).then(this.writeNewPostSuccessCb,
+            (error) => {
+                console.log(error);
+            });
     }
 
     writeNewPost(uid, username, title, content) {
@@ -71,9 +73,11 @@ class CreatePost extends Component {
             <form className="form-newpost" onSubmit={this.handleSubmit}>
                 <h2 className="form-signin-heading">Create a new blog post</h2>
                 <label className="sr-only">Title</label>
-                <input type="text" className="form-control" placeholder="Title" onChange={this.handleTitleChange} />
+                <input type="text" className="form-control" placeholder="Title" value={this.state.title}
+                       onChange={this.handleTitleChange}/>
 
-                <textarea placeholder="Write here your blog post" className="form-control" rows="10" onChange={this.handlePostBodyChange} />
+                <textarea placeholder="Write here your blog post" className="form-control" rows="10"
+                          value={this.state.content} onChange={this.handlePostBodyChange}/>
 
                 <button className="btn btn-lg btn-primary" type="submit">Create Post</button>
             </form>

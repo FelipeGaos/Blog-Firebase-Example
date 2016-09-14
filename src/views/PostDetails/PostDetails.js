@@ -37,6 +37,7 @@ class PostDetails extends Component {
         this.handleSubmitEditComment = this.handleSubmitEditComment.bind(this);
         this.updateComment = this.updateComment.bind(this);
         this.handleEditCommentChange = this.handleEditCommentChange.bind(this);
+        this.commentsSection = this.commentsSection.bind(this);
     }
 
     componentDidMount = () => {
@@ -54,7 +55,7 @@ class PostDetails extends Component {
     }
 
     handleClickEditPost() {
-
+        hashHistory.push('/posts/edit/' + this.props.params.postId);
     }
 
     handleClickDeletePost() {
@@ -75,6 +76,7 @@ class PostDetails extends Component {
         var updates = {};
         updates['/posts/' + this.props.params.postId] = null;
         updates['/user-posts/' + user.uid + '/' + this.props.params.postId] = null;
+        updates['/post-comments/' + this.props.params.postId] = null;
 
         return firebase.database().ref().update(updates);
     }
@@ -215,6 +217,25 @@ class PostDetails extends Component {
             this.setState({comments: tempComments});
             this.setState({numComments: tempComments.length});
         }
+        else {
+            this.setState({hasComments: false});
+            this.setState({comments: tempComments});
+            this.setState({numComments: tempComments.length});
+        }
+    }
+
+    commentsSection() {
+        return (
+            <div>
+                <p className="num-comments-title">{this.state.numComments} Comments</p>
+                <form className="form-newcomment" onSubmit={this.handleSubmitNewComment}>
+                    <textarea placeholder="Write your comment here" className="form-control" rows="2" value={this.state.newComment}
+                                                  onChange={this.handleCommentChange}/>
+                    <button className="btn btn-lg btn-primary add-comment-btn" type="submit">Publish Comment</button>
+                </form>
+                {this.state.comments}
+            </div>
+        );
     }
 
     render() {
@@ -249,22 +270,8 @@ class PostDetails extends Component {
                                     </form>
                                 </div>
                                 :
-                                <div>
-                                    <p className="num-comments-title">{this.state.numComments} Comments</p>
-
-                                    <form className="form-newcomment" onSubmit={this.handleSubmitNewComment}>
-                                        <textarea placeholder="Write your comment here" className="form-control"
-                                                  rows="2" value={this.state.newComment}
-                                                  onChange={this.handleCommentChange}/>
-
-                                        <button className="btn btn-lg btn-primary add-comment-btn" type="submit">Publish
-                                            Comment
-                                        </button>
-                                    </form>
-
-                                    {this.state.comments}
-                                </div>
-                            : null
+                                this.commentsSection()
+                            : this.commentsSection()
                         }
                     </div>
                 </div>
