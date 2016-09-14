@@ -13,6 +13,8 @@ class PostDetails extends Component {
         super(props);
 
         this.state = {
+            isAuthenticated: false,
+            userEmail: "",
             post: {},
             numComments: 0,
             comments: [],
@@ -27,7 +29,6 @@ class PostDetails extends Component {
         this.handleClickDeletePost = this.handleClickDeletePost.bind(this);
         this.handleCommentChange = this.handleCommentChange.bind(this);
         this.buildListOfComments = this.buildListOfComments.bind(this);
-        this.getCommentsDataCb = this.getCommentsDataCb.bind(this);
         this.createNewComment = this.createNewComment.bind(this);
         this.handleSubmitNewComment = this.handleSubmitNewComment.bind(this);
         this.handleClickEditComment = this.handleClickEditComment.bind(this);
@@ -41,6 +42,10 @@ class PostDetails extends Component {
     }
 
     componentDidMount = () => {
+        firebase.auth().onAuthStateChanged((user) => {
+            this.setState({isAuthenticated: user ? true : false});
+        });
+
         var postId = this.props.params.postId;
         firebase.database().ref('/posts/' + postId).once('value').then(this.getPostDataCb);
     };
@@ -48,10 +53,16 @@ class PostDetails extends Component {
     /* Post functions */
 
     getPostDataCb(data) {
-        this.setState({post: data.val()});
+        var user = firebase.auth().currentUser;
         var postId = this.props.params.postId;
+
+        this.setState({post: data.val()});
+        this.setState({userEmail: user ? user.email : ""});
+
         var commentsRef = firebase.database().ref('post-comments/' + postId);
-        commentsRef.on('value', this.getCommentsDataCb);
+        commentsRef.on('value', (data) => {
+            this.buildListOfComments(data.val());
+        });
     }
 
     handleClickEditPost() {
@@ -83,13 +94,8 @@ class PostDetails extends Component {
 
     /* Comments functions */
 
-    getCommentsDataCb(data) {
-        this.buildListOfComments(data.val());
-    }
-
     handleSubmitEditComment() {
-        var user = firebase.auth().currentUser;
-        this.updateComment(this.state.commentToEdit.content, user.email, this.state.commentToEdit.id).then(() => {
+        this.updateComment(this.state.commentToEdit.content, this.state.userEmail, this.state.commentToEdit.id).then(() => {
             this.handleCancelEditComment();
         }, (error) => {
             console.log(error);
@@ -118,11 +124,16 @@ class PostDetails extends Component {
             return;
         }
         var user = firebase.auth().currentUser;
-        this.createNewComment(this.state.newComment, user.email).then(() => {
-            this.setState({newComment: ""});
-        }, (error) => {
-            console.log(error);
-        });
+        if (user) {
+            this.createNewComment(this.state.newComment, user.email).then(() => {
+                this.setState({newComment: ""});
+            }, (error) => {
+                console.log(error);
+            });
+        }
+        else {
+            console.log("user is not signed up");
+        }
     }
 
     handleClickEditComment(e) {
@@ -196,18 +207,18 @@ class PostDetails extends Component {
             for (var k in comments) {
                 if (comments.hasOwnProperty(k)) {
                     tempComments.push(
-                        <div key={k}>
+                        <div key={k} className="comment-box">
                             <p className="comment-author">
-                                <b>{comments[k].username}</b> - <span
-                                className="comment-date">{Helpers.convertDateToLongString(comments[k].datetime)}</span>
+                                <b>{comments[k].username}</b> - <span className="comment-date">{Helpers.convertDateToLongString(comments[k].datetime)}</span>
                             </p>
                             <div>
                                 <p className="comment-body">{comments[k].content}</p>
-                                <div className="actions-comment-box">
-                                    <a value={comments[k].content} name={k}
-                                       onClick={this.handleClickEditComment}>Edit</a>
-                                    <a value={k} onClick={this.handleClickDeleteComment}>Delete</a>
-                                </div>
+                                {comments[k].username === this.state.userEmail ?
+                                    <div className="actions-comment-box">
+                                        <a value={comments[k].content} name={k} onClick={this.handleClickEditComment}>Edit</a>
+                                        <a value={k} onClick={this.handleClickDeleteComment}>Delete</a>
+                                    </div> : null
+                                }
                             </div>
                         </div>
                     );
@@ -227,12 +238,16 @@ class PostDetails extends Component {
     commentsSection() {
         return (
             <div>
-                <p className="num-comments-title">{this.state.numComments} Comments</p>
-                <form className="form-newcomment" onSubmit={this.handleSubmitNewComment}>
-                    <textarea placeholder="Write your comment here" className="form-control" rows="2" value={this.state.newComment}
-                                                  onChange={this.handleCommentChange}/>
-                    <button className="btn btn-lg btn-primary add-comment-btn" type="submit">Publish Comment</button>
-                </form>
+                {this.state.isAuthenticated ?
+                    <div>
+                        <p className="num-comments-title">{this.state.numComments} Comments</p>
+                        <form className="form-newcomment" onSubmit={this.handleSubmitNewComment}>
+                            <textarea placeholder="Write your comment here" className="form-control" rows="2" value={this.state.newComment}
+                              onChange={this.handleCommentChange}/>
+                            <button className="btn btn-lg btn-primary add-comment-btn" type="submit">Publish Comment</button>
+                        </form>
+                    </div> : null
+                }
                 {this.state.comments}
             </div>
         );
@@ -241,10 +256,13 @@ class PostDetails extends Component {
     render() {
         return (
             <div className="posts-section">
-                <div className="actions-container">
-                    <a onClick={this.handleClickEditPost}>Edit Post</a>
-                    <a onClick={this.handleClickDeletePost}>Delete Post</a>
-                </div>
+                {this.state.post.username === this.state.userEmail ?
+                    <div className="actions-container">
+                        <a onClick={this.handleClickEditPost}>Edit Post</a>
+                        <a onClick={this.handleClickDeletePost}>Delete Post</a>
+                    </div> : null
+                }
+
                 <h2>{this.state.post.title}</h2>
                 <p>{this.state.post.content}</p>
                 <p className="post-details-author">

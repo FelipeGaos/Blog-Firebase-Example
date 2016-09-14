@@ -16,53 +16,23 @@ class Home extends Component {
             posts: []
         };
 
-        this.callBackAuthState = this.callBackAuthState.bind(this);
         this.buildListOfPosts = this.buildListOfPosts.bind(this);
-        this.onValueChangeListener = this.onValueChangeListener.bind(this);
         this.openFullPost = this.openFullPost.bind(this);
     }
 
-    callBackAuthState(user) {
-        if (user) {
-            // User is signed in.
-            console.log("user is sign in");
-        } else {
-            // No user is signed in.
-            console.log("user is not sign in");
-        }
-    }
-
-    openFullPost(e) {
-        var postId = e.target.getAttribute("value");
-        hashHistory.push('/posts/' + postId);
-    }
-
-    onValueChangeListener(data) {
-        this.buildListOfPosts(data.val());
-    }
-
     componentDidMount = () => {
-        firebase.auth().onAuthStateChanged(this.callBackAuthState);
-
-        var recentPostsRef = firebase.database().ref('/posts/').limitToLast(100);
-        recentPostsRef.on('value', this.onValueChangeListener);
-
-
-
-        // commentsRef.on('child_added', function(data) {
-        //     addCommentElement(postElement, data.key, data.val().text, data.val().author);
-        // });
-        //
-        // commentsRef.on('child_changed', function(data) {
-        //     setCommentValues(postElement, data.key, data.val().text, data.val().author);
-        // });
-        //
-        // commentsRef.on('child_removed', function(data) {
-        //     deleteComment(postElement, data.key);
-        // });
+        var recentPostsRef = firebase.database().ref('/posts/').limitToLast(10);
+        recentPostsRef.on('value', (data) => {
+            this.buildListOfPosts(data.val());
+        });
     };
 
-    buildListOfPosts(posts) {
+    openFullPost = (e) => {
+        var postId = e.target.getAttribute("value");
+        hashHistory.push('/posts/' + postId);
+    };
+
+    buildListOfPosts = (posts) => {
         var tempPosts = [];
         for (var k in posts) {
             if (posts.hasOwnProperty(k)) {
@@ -78,8 +48,9 @@ class Home extends Component {
                 );
             }
         }
+        tempPosts.reverse();
         this.setState({posts: tempPosts});
-    }
+    };
 
     render() {
         return (

@@ -5,7 +5,7 @@
 
 .posts-section h2 {
     margin-bottom: 20px;
-    margin-top: 15px;
+    margin-top: 50px;
 }
 
 .post-details-author {
@@ -19,12 +19,16 @@
 }
 
 .actions-container a + a {
-    margin-left: 10px;
+    margin-left: 40px;
 }
 
 .comments-section {
-    padding: 0 15%;
+    padding: 0 5%;
     margin-bottom: 45px;
+}
+
+.comment-box {
+    margin: 35px 0;
 }
 
 .num-comments-title {
@@ -33,7 +37,7 @@
 }
 
 .form-newcomment {
-    padding: 15px 0;
+    padding: 15px 0 0 0;
     margin: 0 auto;
 }
 

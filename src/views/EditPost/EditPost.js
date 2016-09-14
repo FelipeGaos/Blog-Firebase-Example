@@ -20,7 +20,6 @@ class EditPost extends Component {
         this.handlePostBodyChange = this.handlePostBodyChange.bind(this);
         this.updatePost = this.updatePost.bind(this);
         this.getPostDataCb = this.getPostDataCb.bind(this);
-        this.updatePostSuccessCb = this.updatePostSuccessCb.bind(this);
     }
 
     componentDidMount = () => {
@@ -28,37 +27,35 @@ class EditPost extends Component {
         firebase.database().ref('/posts/' + postId).once('value').then(this.getPostDataCb);
     };
 
-    getPostDataCb(data) {
+    getPostDataCb = (data) => {
         var post = data.val();
         this.setState({title: post.title});
         this.setState({content: post.content});
-    }
+    };
 
-    updatePostSuccessCb() {
-        hashHistory.push('/posts/' + this.props.params.postId);
-    }
-
-    handleTitleChange(e) {
+    handleTitleChange = (e) => {
         this.setState({title: e.target.value});
-    }
+    };
 
-    handlePostBodyChange(e) {
+    handlePostBodyChange = (e) => {
         this.setState({content: e.target.value});
-    }
+    };
 
-    handleSubmit(e) {
+    handleSubmit = (e) => {
         e.preventDefault();
         if (Helpers.hasEmptyFields(this.state.title, this.state.content)) {
             console.log("Empty fields");
             return;
         }
         var user = firebase.auth().currentUser;
-        this.updatePost(user.uid, user.email, this.state.title, this.state.content).then(this.updatePostSuccessCb, (error) => {
+        this.updatePost(user.uid, user.email, this.state.title, this.state.content).then(() => {
+            hashHistory.push('/posts/' + this.props.params.postId);
+        }, (error) => {
             console.log(error);
         });
-    }
+    };
 
-    updatePost(uid, username, title, content) {
+    updatePost = (uid, username, title, content) => {
         var postData = {
             title: title,
             content: content,
@@ -71,7 +68,7 @@ class EditPost extends Component {
         updates['/user-posts/' + uid + '/' + postKey] = postData;
 
         return firebase.database().ref().update(updates);
-    }
+    };
 
     render() {
         return (

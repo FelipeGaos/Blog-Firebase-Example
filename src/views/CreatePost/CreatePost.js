@@ -73,8 +73,7 @@ class CreatePost extends Component {
             <form className="form-newpost" onSubmit={this.handleSubmit}>
                 <h2 className="form-signin-heading">Create a new blog post</h2>
                 <label className="sr-only">Title</label>
-                <input type="text" className="form-control" placeholder="Title" value={this.state.title}
-                       onChange={this.handleTitleChange}/>
+                <input type="text" className="form-control" placeholder="Title" value={this.state.title} onChange={this.handleTitleChange} />
 
                 <textarea placeholder="Write here your blog post" className="form-control" rows="10"
                           value={this.state.content} onChange={this.handlePostBodyChange}/>

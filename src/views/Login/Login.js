@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { hashHistory } from 'react-router'
+import { Helpers } from '../../Helpers/helpers'
 import './login.css';
 
 class Login extends Component {
@@ -11,41 +12,32 @@ class Login extends Component {
         super(props);
 
         this.state = {
-            email: '',
-            password: ''
+            email: "",
+            password: ""
         };
-        this.isValidEmail = this.isValidEmail.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.signInSuccessCb = this.signInSuccessCb.bind(this);
         this.signInErrorCb = this.signInErrorCb.bind(this);
-        this.callBackAuthState = this.callBackAuthState.bind(this);
     }
 
-    callBackAuthState(user) {
-        if (user) {
-            hashHistory.push('/');
-        }
-    }
-
-    componentDidMount = function() {
-        firebase.auth().onAuthStateChanged(this.callBackAuthState);
+    componentDidMount = () => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                hashHistory.push('/');
+            }
+        });
     };
 
-    handleEmailChange(e) {
+    handleEmailChange = (e) => {
         this.setState({email: e.target.value});
-    }
+    };
 
-    handlePasswordChange(e) {
+    handlePasswordChange = (e) => {
         this.setState({password: e.target.value});
-    }
+    };
 
-    signInSuccessCb(response) {
-        hashHistory.push('/');
-    }
-
-    signInErrorCb(error) {
+    signInErrorCb = (error) => {
         switch (error.code) {
             case "auth/user-not-found": {
                 console.log("There is no account associated with that email address.");
@@ -59,19 +51,23 @@ class Login extends Component {
                 break;
         }
         console.log(error);
-    }
+    };
+
     handleSubmit(e) {
         e.preventDefault();
-        if (!this.isValidEmail()) {
+        if (Helpers.hasEmptyFields(this.state.email, this.state.password)) {
+            console.log("Empty fields!");
+            return;
+        }
+        if (!Helpers.isValidEmail(this.state.email)) {
             console.log("Invalid email");
             return;
         }
-        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then(this.signInSuccessCb, this.signInErrorCb);
+        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {
+            hashHistory.push('/');
+        }, this.signInErrorCb);
     }
-    isValidEmail() {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(this.state.email);
-    }
+
     render() {
         return (
             <form className="form-signin" onSubmit={this.handleSubmit}>

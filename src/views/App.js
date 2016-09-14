@@ -15,7 +15,11 @@ class App extends Component {
         this.callBackAuthState = this.callBackAuthState.bind(this);
     }
 
-    callBackAuthState(user) {
+    componentDidMount = () => {
+        firebase.auth().onAuthStateChanged(this.callBackAuthState);
+    };
+
+    callBackAuthState = (user) => {
         if (user) {
             // User is signed in.
             this.setState({ userLoggedIn: true});
@@ -23,27 +27,23 @@ class App extends Component {
             // No user is signed in.
             this.setState({ userLoggedIn: false});
         }
-    }
-
-    componentDidMount = function() {
-        firebase.auth().onAuthStateChanged(this.callBackAuthState);
     };
 
-    handleLogOutClick() {
-        firebase.auth().signOut().then(function() {
+    handleLogOutClick = () => {
+        firebase.auth().signOut().then(() => {
             // Sign-out successful.
-        }, function(error) {
+        }, (error) => {
             // An error happened.
             console.log(error);
         });
-    }
+    };
 
     render() {
         return (
             <div className="App">
                 <div className="App-header">
                     <div className="header-bar">
-                        <img className="App-logo" src={logo} />
+                        <img className="App-logo" src={logo} alt="logo" />
                         <ul className="nav navbar-nav navbar-right">
                             <li>
                                 <Link to="/">Home</Link>

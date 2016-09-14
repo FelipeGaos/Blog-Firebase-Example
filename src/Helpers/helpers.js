@@ -3,9 +3,6 @@
  */
 
 export class Helpers {
-    constructor() {
-
-    }
 
     /**
      * Converts a date string in a human readable format (MMM DD, YYYY)
@@ -41,6 +38,26 @@ export class Helpers {
             }
         }
         return false;
+    };
+
+    /**
+     * Checks if two passwords are equal
+     * @param pass1
+     * @param pass2
+     * @returns {boolean}
+     */
+    static passwordsMatch = (pass1, pass2) => {
+        return pass1 === pass2;
+    };
+
+    /**
+     * Checks if an email address is valid using regular expressions
+     * @param email
+     * @returns {boolean}
+     */
+    static isValidEmail = (email) => {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
     };
 
     /**

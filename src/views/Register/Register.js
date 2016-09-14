@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { hashHistory } from 'react-router'
+import { Helpers } from '../../Helpers/helpers'
 import './register.css';
 
 class Register extends Component {
@@ -15,44 +16,34 @@ class Register extends Component {
             password: '',
             repeatPass: ''
         };
-        this.isValidEmail = this.isValidEmail.bind(this);
-        this.passwordsMatch = this.passwordsMatch.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
-        this.callBackAuthState = this.callBackAuthState.bind(this);
-        this.signUpSuccessCb = this.signUpSuccessCb.bind(this);
         this.signUpErrorCb = this.signUpErrorCb.bind(this);
     }
 
-    callBackAuthState(user) {
-        if (user) {
-            hashHistory.push('/');
-        }
-    }
-
-    componentDidMount = function() {
-        firebase.auth().onAuthStateChanged(this.callBackAuthState);
+    componentDidMount = () => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                hashHistory.push('/');
+            }
+        });
     };
 
-    handleEmailChange(e) {
+    handleEmailChange = (e) => {
         this.setState({email: e.target.value});
-    }
+    };
 
-    handlePasswordChange(e) {
+    handlePasswordChange = (e) => {
         this.setState({password: e.target.value});
-    }
+    };
 
-    handleRepeatPasswordChange(e) {
+    handleRepeatPasswordChange = (e) => {
         this.setState({repeatPass: e.target.value});
-    }
+    };
 
-    signUpSuccessCb(response) {
-        hashHistory.push('/');
-    }
-
-    signUpErrorCb(error) {
+    signUpErrorCb = (error) => {
         switch (error.code) {
             case "auth/user-not-found": {
                 console.log("There is no account associated with that email address.");
@@ -66,27 +57,27 @@ class Register extends Component {
                 break;
         }
         console.log(error);
-    }
+    };
 
-    handleSubmit(e) {
+    handleSubmit = (e) => {
         e.preventDefault();
-        if (!this.isValidEmail()) {
+        if (Helpers.hasEmptyFields(this.state.email, this.state.password, this.state.repeatPass)) {
+            console.log("Empty fields!");
+            return;
+        }
+        if (!Helpers.isValidEmail(this.state.email)) {
             console.log("Invalid email");
             return;
         }
-        if (!this.passwordsMatch()) {
+        if (!Helpers.passwordsMatch(this.state.password, this.state.repeatPass)) {
             console.log("Passwords don't match!");
             return;
         }
-        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(this.signUpSuccessCb, this.signUpErrorCb);
-    }
-    passwordsMatch() {
-        return this.state.password === this.state.repeatPass;
-    }
-    isValidEmail() {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(this.state.email);
-    }
+        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(() => {
+            hashHistory.push('/');
+        }, this.signUpErrorCb);
+    };
+
     render() {
         return (
             <form className="form-signup" onSubmit={this.handleSubmit}>
