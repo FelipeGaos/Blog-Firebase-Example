@@ -97,3 +97,7 @@ hr.small {
   font-weight: 300;
   margin: 10px 0 0;
 }
+
+.alert {
+  margin: 20px 20% 0;
+}

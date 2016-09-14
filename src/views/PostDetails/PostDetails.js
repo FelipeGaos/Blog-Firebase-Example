@@ -5,6 +5,8 @@
 import React, { Component } from 'react';
 import { hashHistory } from 'react-router'
 import { Helpers } from '../../Helpers/helpers'
+import AlertMessage from '../../components/Alert/AlertMessage'
+import { Comment } from '../../components/Comment/Comment'
 import './post_details.css';
 
 class PostDetails extends Component {
@@ -21,7 +23,10 @@ class PostDetails extends Component {
             newComment: "",
             hasComments: false,
             editCommentMode: false,
-            commentToEdit: {id: null, content: ""}
+            commentToEdit: {id: null, content: ""},
+            alertMessage: "",
+            alertType: "danger",
+            visible: false
         };
 
         this.getPostDataCb = this.getPostDataCb.bind(this);
@@ -50,6 +55,15 @@ class PostDetails extends Component {
         firebase.database().ref('/posts/' + postId).once('value').then(this.getPostDataCb);
     };
 
+    showAlertMessage = (msg, type, time) => {
+        this.setState({ alertMessage: msg });
+        this.setState({ alertType: type });
+        this.setState({ visible: true });
+        setTimeout(() => {
+            this.setState({ visible: false });
+        }, time);
+    };
+
     /* Post functions */
 
     getPostDataCb(data) {
@@ -75,7 +89,7 @@ class PostDetails extends Component {
             this.removePost().then(() => {
                 hashHistory.push('/');
             }, (error) => {
-                console.log(error);
+                this.showAlertMessage(error.message, "danger", 2500);
             });
         }
     }
@@ -96,9 +110,10 @@ class PostDetails extends Component {
 
     handleSubmitEditComment() {
         this.updateComment(this.state.commentToEdit.content, this.state.userEmail, this.state.commentToEdit.id).then(() => {
+            this.showAlertMessage("Comment updated successfully", "success", 2500);
             this.handleCancelEditComment();
         }, (error) => {
-            console.log(error);
+            this.showAlertMessage(error.message, "danger", 2500);
         });
     }
 
@@ -120,7 +135,7 @@ class PostDetails extends Component {
     handleSubmitNewComment(e) {
         e.preventDefault();
         if (!this.state.newComment) {
-            console.log("Your comment cannot be empty!");
+            this.showAlertMessage("Your comment cannot be empty!", "danger", 2500);
             return;
         }
         var user = firebase.auth().currentUser;
@@ -128,11 +143,11 @@ class PostDetails extends Component {
             this.createNewComment(this.state.newComment, user.email).then(() => {
                 this.setState({newComment: ""});
             }, (error) => {
-                console.log(error);
+                this.showAlertMessage(error.message, "danger", 2500);
             });
         }
         else {
-            console.log("user is not signed up");
+            this.showAlertMessage("You have to sign up first", "danger", 2500);
         }
     }
 
@@ -146,9 +161,9 @@ class PostDetails extends Component {
         var commentId = e.target.getAttribute("value");
         if (ans) {
             this.removeComment(commentId).then(() => {
-                console.log("comment deleted");
+                this.showAlertMessage("Comment deleted successfully", "success", 2500);
             }, (error) => {
-                console.log(error);
+                this.showAlertMessage(error.message, "danger", 2500);
             });
         }
     }
@@ -207,20 +222,16 @@ class PostDetails extends Component {
             for (var k in comments) {
                 if (comments.hasOwnProperty(k)) {
                     tempComments.push(
-                        <div key={k} className="comment-box">
-                            <p className="comment-author">
-                                <b>{comments[k].username}</b> - <span className="comment-date">{Helpers.convertDateToLongString(comments[k].datetime)}</span>
-                            </p>
-                            <div>
-                                <p className="comment-body">{comments[k].content}</p>
-                                {comments[k].username === this.state.userEmail ?
-                                    <div className="actions-comment-box">
-                                        <a value={comments[k].content} name={k} onClick={this.handleClickEditComment}>Edit</a>
-                                        <a value={k} onClick={this.handleClickDeleteComment}>Delete</a>
-                                    </div> : null
-                                }
-                            </div>
-                        </div>
+                        <Comment
+                            key={k}
+                            k={k}
+                            content={comments[k].content}
+                            username={comments[k].username}
+                            userEmail={this.state.userEmail}
+                            datetime={comments[k].datetime}
+                            onClickEdit={this.handleClickEditComment}
+                            onClickDelete={this.handleClickDeleteComment}
+                        />
                     );
                 }
             }
@@ -271,6 +282,7 @@ class PostDetails extends Component {
                 </p>
 
                 <div className="comments-section">
+                    <AlertMessage type={this.state.alertType} message={this.state.alertMessage} visible={this.state.visible} />
                     <div>
                         {this.state.hasComments ?
                             this.state.editCommentMode ?

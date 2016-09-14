@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import { hashHistory } from 'react-router'
 import { Helpers } from '../../Helpers/helpers'
+import AlertMessage from '../../components/Alert/AlertMessage'
 import './login.css';
 
 class Login extends Component {
@@ -13,12 +14,16 @@ class Login extends Component {
 
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            alertMessage: "",
+            alertType: "danger",
+            visible: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.signInErrorCb = this.signInErrorCb.bind(this);
+        this.showAlertMessage = this.showAlertMessage.bind(this);
     }
 
     componentDidMount = () => {
@@ -27,6 +32,14 @@ class Login extends Component {
                 hashHistory.push('/');
             }
         });
+    };
+
+    showAlertMessage = (msg, time) => {
+        this.setState({ alertMessage: msg });
+        this.setState({ visible: true });
+        setTimeout(() => {
+            this.setState({ visible: false });
+        }, time);
     };
 
     handleEmailChange = (e) => {
@@ -40,27 +53,27 @@ class Login extends Component {
     signInErrorCb = (error) => {
         switch (error.code) {
             case "auth/user-not-found": {
-                console.log("There is no account associated with that email address.");
+                this.showAlertMessage("There is no account associated with that email address.", 2500);
                 break;
             }
             case "auth/wrong-password": {
-                console.log("Invalid password, please try again!");
+                this.showAlertMessage("Invalid password, please try again!", 2500);
                 break;
             }
             default:
+                this.showAlertMessage(error.message, 2500);
                 break;
         }
-        console.log(error);
     };
 
     handleSubmit(e) {
         e.preventDefault();
         if (Helpers.hasEmptyFields(this.state.email, this.state.password)) {
-            console.log("Empty fields!");
+            this.showAlertMessage("There are empty fields!", 2500);
             return;
         }
         if (!Helpers.isValidEmail(this.state.email)) {
-            console.log("Invalid email");
+            this.showAlertMessage("Invalid email address!", 2500);
             return;
         }
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {
@@ -70,15 +83,19 @@ class Login extends Component {
 
     render() {
         return (
-            <form className="form-signin" onSubmit={this.handleSubmit}>
-                <h2 className="form-signin-heading">Please sign in</h2>
-                <label className="sr-only">Email</label>
-                <input type="email" className="form-control" placeholder="Email" onChange={this.handleEmailChange} />
-                <label className="sr-only">Password</label>
-                <input type="password" className="form-control" placeholder="Password" onChange={this.handlePasswordChange} />
+            <div>
+                <AlertMessage type={this.state.alertType} message={this.state.alertMessage} visible={this.state.visible} />
 
-                <button className="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
-            </form>
+                <form className="form-signin" onSubmit={this.handleSubmit}>
+                    <h2 className="form-signin-heading">Please sign in</h2>
+                    <label className="sr-only">Email</label>
+                    <input type="email" className="form-control" placeholder="Email" onChange={this.handleEmailChange} />
+                    <label className="sr-only">Password</label>
+                    <input type="password" className="form-control" placeholder="Password" onChange={this.handlePasswordChange} />
+
+                    <button className="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+                </form>
+            </div>
         );
     }
 }

@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { Helpers } from '../../Helpers/helpers'
+import AlertMessage from '../../components/Alert/AlertMessage'
 import './create_post.css';
 
 class CreatePost extends Component {
@@ -12,14 +13,27 @@ class CreatePost extends Component {
 
         this.state = {
             title: "",
-            content: ""
+            content: "",
+            alertMessage: "",
+            alertType: "danger",
+            visible: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handlePostBodyChange = this.handlePostBodyChange.bind(this);
         this.writeNewPost = this.writeNewPost.bind(this);
         this.writeNewPostSuccessCb = this.writeNewPostSuccessCb.bind(this);
+        this.showAlertMessage = this.showAlertMessage.bind(this);
     }
+
+    showAlertMessage = (msg, type, time) => {
+        this.setState({ alertMessage: msg });
+        this.setState({ alertType: type });
+        this.setState({ visible: true });
+        setTimeout(() => {
+            this.setState({ visible: false });
+        }, time);
+    };
 
     handleTitleChange(e) {
         this.setState({title: e.target.value});
@@ -30,7 +44,7 @@ class CreatePost extends Component {
     }
 
     writeNewPostSuccessCb() {
-        console.log("success");
+        this.showAlertMessage("Your post was created successfully!", "success", 2500);
         this.setState({title: ""});
         this.setState({content: ""});
     }
@@ -38,13 +52,13 @@ class CreatePost extends Component {
     handleSubmit(e) {
         e.preventDefault();
         if (Helpers.hasEmptyFields(this.state.title, this.state.content)) {
-            console.log("Empty fields");
+            this.showAlertMessage("There are empty fields!", "danger", 2500);
             return;
         }
         var user = firebase.auth().currentUser;
         this.writeNewPost(user.uid, user.email, this.state.title, this.state.content).then(this.writeNewPostSuccessCb,
             (error) => {
-                console.log(error);
+                this.showAlertMessage(error.message, "danger", 3000);
             });
     }
 
@@ -70,16 +84,20 @@ class CreatePost extends Component {
 
     render() {
         return (
-            <form className="form-newpost" onSubmit={this.handleSubmit}>
-                <h2 className="form-signin-heading">Create a new blog post</h2>
-                <label className="sr-only">Title</label>
-                <input type="text" className="form-control" placeholder="Title" value={this.state.title} onChange={this.handleTitleChange} />
+            <div>
+                <AlertMessage type={this.state.alertType} message={this.state.alertMessage} visible={this.state.visible} />
 
-                <textarea placeholder="Write here your blog post" className="form-control" rows="10"
-                          value={this.state.content} onChange={this.handlePostBodyChange}/>
+                <form className="form-newpost" onSubmit={this.handleSubmit}>
+                    <h2 className="form-signin-heading">Create a new blog post</h2>
+                    <label className="sr-only">Title</label>
+                    <input type="text" className="form-control" placeholder="Title" value={this.state.title} onChange={this.handleTitleChange} />
 
-                <button className="btn btn-lg btn-primary" type="submit">Create Post</button>
-            </form>
+                    <textarea placeholder="Write here your blog post" className="form-control" rows="10"
+                              value={this.state.content} onChange={this.handlePostBodyChange}/>
+
+                    <button className="btn btn-lg btn-primary" type="submit">Create Post</button>
+                </form>
+            </div>
         );
     }
 }

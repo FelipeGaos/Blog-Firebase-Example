@@ -21,16 +21,19 @@ export class Helpers {
      * @returns {string}
      */
     static convertDateToLongString = (date) => {
-        var dateObj = new Date(date);
-        var convertedDate = dateObj.toString().split(" ");
-        return convertedDate[1] + " " + convertedDate[2] + ", " + convertedDate[3] + " at " + convertedDate[4].substring(0, 5);
+        if (date) {
+            var dateObj = new Date(date);
+            var convertedDate = dateObj.toString().split(" ");
+            return convertedDate[1] + " " + convertedDate[2] + ", " + convertedDate[3] + " at " + convertedDate[4].substring(0, 5);
+        }
+        return "";
     };
 
     /**
      * Takes a number of arguments and checks if any of them is null, empty or undefined
      * @returns {boolean}
      */
-    static hasEmptyFields = () => {
+    static hasEmptyFields() {
         var params = Array.prototype.slice.call(arguments);
         for (var i = 0; i < params.length; ++i) {
             if (!params[i]) {
