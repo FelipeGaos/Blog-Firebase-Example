@@ -6,9 +6,6 @@ import React, { Component } from 'react';
 import { Helpers } from '../../Helpers/helpers'
 
 export class Comment extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

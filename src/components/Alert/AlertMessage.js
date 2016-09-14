@@ -6,9 +6,6 @@ import React, { Component } from 'react';
 import { Alert } from 'react-bootstrap';
 
 class AlertMessage extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

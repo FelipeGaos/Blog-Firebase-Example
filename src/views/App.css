@@ -49,6 +49,7 @@
   height: 50px;
   float: left;
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .header-bar {
@@ -100,4 +101,28 @@ hr.small {
 
 .alert {
   margin: 20px 20% 0;
+}
+
+@media only screen and (max-width: 994px) {
+  .header-bar {
+    padding: 0 5%;
+  }
+  .site-heading h2 {
+    font-size: 47px;
+    margin-top: 125px;
+  }
+  .nav>li {
+    display: table-cell;
+  }
+  .nav li a {
+    font-size: 12px;
+    padding: 20px 10px;
+  }
+  .navbar-nav {
+    margin: 0;
+    float: right;
+  }
+  .body-container {
+    padding: 0 5% 135px 5%;
+  }
 }

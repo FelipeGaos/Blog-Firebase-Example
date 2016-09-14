@@ -6,9 +6,6 @@ import React, { Component } from 'react';
 import { Pagination } from 'react-bootstrap';
 
 class PaginationAdvanced extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

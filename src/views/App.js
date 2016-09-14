@@ -43,7 +43,9 @@ class App extends Component {
             <div className="App">
                 <div className="App-header">
                     <div className="header-bar">
-                        <img className="App-logo" src={logo} alt="logo" />
+                        <Link to="/">
+                            <img className="App-logo" src={logo} alt="logo" />
+                        </Link>
                         <ul className="nav navbar-nav navbar-right">
                             <li>
                                 <Link to="/">Home</Link>
