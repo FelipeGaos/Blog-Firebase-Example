@@ -88,14 +88,14 @@ class CreatePost extends Component {
                 <AlertMessage type={this.state.alertType} message={this.state.alertMessage} visible={this.state.visible} />
 
                 <form className="form-newpost" onSubmit={this.handleSubmit}>
-                    <h2 className="form-signin-heading">Create a new blog post</h2>
-                    <label className="sr-only">Title</label>
+                    <h2 className="form-signin-heading">Crear Nuevo blog post</h2>
+                    <label className="sr-only">Titulo</label>
                     <input type="text" className="form-control" placeholder="Title" value={this.state.title} onChange={this.handleTitleChange} />
 
-                    <textarea placeholder="Write here your blog post" className="form-control" rows="10"
+                    <textarea placeholder="Escribe aqui tu blog post" className="form-control" rows="10"
                               value={this.state.content} onChange={this.handlePostBodyChange}/>
 
-                    <button className="btn btn-lg btn-primary" type="submit">Create Post</button>
+                    <button className="btn btn-lg btn-primary" type="submit">Crear Post</button>
                 </form>
             </div>
         );

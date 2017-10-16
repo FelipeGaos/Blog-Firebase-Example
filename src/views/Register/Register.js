@@ -82,15 +82,15 @@ class Register extends Component {
                 <AlertMessage type={this.state.alertType} message={this.state.alertMessage} visible={this.state.visible} />
 
                 <form className="form-signup" onSubmit={this.handleSubmit}>
-                    <h2 className="form-signin-heading">Please sign up</h2>
+                    <h2 className="form-signin-heading">Registro de Usuario</h2>
                     <label className="sr-only">Email</label>
                     <input type="email" className="form-control" placeholder="Email" onChange={this.handleEmailChange} />
-                    <label className="sr-only">Password</label>
-                    <input type="password" className="form-control" placeholder="Password" onChange={this.handlePasswordChange} />
-                    <label className="sr-only">Repeat Password</label>
-                    <input type="password" className="form-control" placeholder="Repeat Password" onChange={this.handleRepeatPasswordChange} />
+                    <label className="sr-only">Contraseña</label>
+                    <input type="password" className="form-control" placeholder="Contraseña" onChange={this.handlePasswordChange} />
+                    <label className="sr-only">Repetir Contraseña</label>
+                    <input type="password" className="form-control" placeholder="Repetir Contraseña" onChange={this.handleRepeatPasswordChange} />
 
-                    <button className="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+                    <button className="btn btn-lg btn-primary btn-block" type="submit">Registrar</button>
                 </form>
             </div>
         );

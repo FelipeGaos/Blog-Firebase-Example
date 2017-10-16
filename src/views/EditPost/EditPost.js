@@ -90,11 +90,11 @@ class EditPost extends Component {
                 <AlertMessage type={this.state.alertType} message={this.state.alertMessage} visible={this.state.visible} />
 
                 <form className="form-newpost" onSubmit={this.handleSubmit}>
-                    <h2 className="form-signin-heading">Edit blog post</h2>
-                    <label className="sr-only">Title</label>
+                    <h2 className="form-signin-heading">Modificar blog post</h2>
+                    <label className="sr-only">Titulo</label>
                     <input type="text" className="form-control" value={this.state.title} onChange={this.handleTitleChange} />
                     <textarea className="form-control" rows="10" value={this.state.content} onChange={this.handlePostBodyChange} />
-                    <button className="btn btn-lg btn-primary" type="submit">Update Post</button>
+                    <button className="btn btn-lg btn-primary" type="submit">Actualizar Post</button>
                 </form>
             </div>
         );

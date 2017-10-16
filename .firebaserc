@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "web-blog-4cc2d"
+    "I had the same issue, and running that command and selecting the instance allowed me to do the deploy.": "fir-demo-project"
   }
 }

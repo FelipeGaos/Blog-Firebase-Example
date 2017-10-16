@@ -48,34 +48,34 @@ class App extends Component {
                         </Link>
                         <ul className="nav navbar-nav navbar-right">
                             <li>
-                                <Link to="/">Home</Link>
+                                <Link to="/">Inicio</Link>
                             </li>
                             {this.state.userLoggedIn ?
                                 <li>
-                                    <Link to="/new_post">Create Post</Link>
+                                    <Link to="/new_post">Crear Post</Link>
                                 </li> : null
                             }
                             {!this.state.userLoggedIn ?
                                 <li>
-                                    <Link to="/login">Sign In</Link>
+                                    <Link to="/login">Iniciar Sesion</Link>
                                 </li> : null
                             }
                             {!this.state.userLoggedIn ?
                                 <li>
-                                    <Link to="/register">Create Account</Link>
+                                    <Link to="/register">Crear Cuenta</Link>
                                 </li> : null
                             }
                             {this.state.userLoggedIn ?
                                 <li>
-                                    <Link to="/" onClick={this.handleLogOutClick}>Log out</Link>
+                                    <Link to="/" onClick={this.handleLogOutClick}>Cerrar Sesion</Link>
                                 </li> : null
                             }
                         </ul>
                     </div>
                     <div className="site-heading">
-                        <h2>Magic Leap</h2>
+                        <h2>Lynx Blog</h2>
                         <hr className="small"/>
-                        <span className="subheading">Engineering Blog</span>
+                        <span className="subheading">Blog De Aplicaciones</span>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@ class App extends Component {
                 </div>
 
                 <div className="footer">
-                    <p>Copyright © 2016 Magic Leap, Inc. </p>
+                    <p>Copyright © 2016 Luis Felipe Gajardo, Inc. </p>
                     <img src={bottomLogo} alt="bottom-Logo"/>
                 </div>
             </div>

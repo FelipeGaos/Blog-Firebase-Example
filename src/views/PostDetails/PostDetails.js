@@ -253,9 +253,9 @@ class PostDetails extends Component {
                     <div>
                         <p className="num-comments-title">{this.state.numComments} Comments</p>
                         <form className="form-newcomment" onSubmit={this.handleSubmitNewComment}>
-                            <textarea placeholder="Write your comment here" className="form-control" rows="2" value={this.state.newComment}
+                            <textarea placeholder="Escribe un comentario" className="form-control" rows="2" value={this.state.newComment}
                               onChange={this.handleCommentChange}/>
-                            <button className="btn btn-lg btn-primary add-comment-btn" type="submit">Publish Comment</button>
+                            <button className="btn btn-lg btn-primary add-comment-btn" type="submit">Publicar Comentario</button>
                         </form>
                     </div> : null
                 }
@@ -269,16 +269,16 @@ class PostDetails extends Component {
             <div className="posts-section">
                 {this.state.post.username === this.state.userEmail ?
                     <div className="actions-container">
-                        <a onClick={this.handleClickEditPost}>Edit Post</a>
-                        <a onClick={this.handleClickDeletePost}>Delete Post</a>
+                        <a onClick={this.handleClickEditPost}>Editar Post</a>
+                        <a onClick={this.handleClickDeletePost}>Borrar Post</a>
                     </div> : null
                 }
 
                 <h2>{this.state.post.title}</h2>
                 <p>{this.state.post.content}</p>
                 <p className="post-details-author">
-                    <b>{this.state.post.username}</b> wrote this
-                    on {Helpers.convertDateToString(this.state.post.datetime)}
+                    <b>{this.state.post.username}</b> Publicado   
+                      en  {Helpers.convertDateToString(this.state.post.datetime)}
                 </p>
 
                 <div className="comments-section">
@@ -287,15 +287,15 @@ class PostDetails extends Component {
                         {this.state.hasComments ?
                             this.state.editCommentMode ?
                                 <div>
-                                    <p className="edit-comment-title">Edit comment</p>
+                                    <p className="edit-comment-title">Editar comentario</p>
                                     <form className="form-newcomment" onSubmit={this.handleSubmitEditComment}>
                                         <textarea className="form-control" rows="4"
                                                   value={this.state.commentToEdit.content}
                                                   onChange={this.handleEditCommentChange}/>
 
-                                        <button className="edit-comment-btn" type="submit">Save</button>
+                                        <button className="edit-comment-btn" type="submit">Guardar</button>
                                         <button className="edit-comment-btn" onClick={this.handleCancelEditComment}>
-                                            Cancel
+                                            Cancelar
                                         </button>
                                     </form>
                                 </div>

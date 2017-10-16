@@ -48,7 +48,7 @@ class Home extends Component {
                         <p>{Helpers.createPostSummary(posts[k].content)}</p>
                         <p className="post-author">
                             <b>{posts[k].username}</b> wrote this on {Helpers.convertDateToString(posts[k].datetime)}
-                            <a className="read-more" value={k} onClick={this.openFullPost}>Read more</a>
+                            <a className="read-more" value={k} onClick={this.openFullPost}>Leer Mas</a>
                         </p>
                     </div>
                 );

@@ -87,13 +87,13 @@ class Login extends Component {
                 <AlertMessage type={this.state.alertType} message={this.state.alertMessage} visible={this.state.visible} />
 
                 <form className="form-signin" onSubmit={this.handleSubmit}>
-                    <h2 className="form-signin-heading">Please sign in</h2>
+                    <h2 className="form-signin-heading">Inicia Sesion</h2>
                     <label className="sr-only">Email</label>
                     <input type="email" className="form-control" placeholder="Email" onChange={this.handleEmailChange} />
-                    <label className="sr-only">Password</label>
+                    <label className="sr-only">Contraseña</label>
                     <input type="password" className="form-control" placeholder="Password" onChange={this.handlePasswordChange} />
 
-                    <button className="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+                    <button className="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesion</button>
                 </form>
             </div>
         );
